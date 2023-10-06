@@ -4,10 +4,10 @@ create database integrador_pravaler;
 create table usuarios(cargo text NOT NULL, nome text NOT NULL, usuario text primary key, senha text NOT NULL);
 create table cliente(nome text NOT NULL, telefone text, email text, empresa text, idCli serial primary key);
 create table produto(tipoprod text NOT NULL, tamanho text NOT NULL, idProd serial primary key,metroPorPeca numeric NOT NULL);
-create table tecido(id integer primary key, tipo text NOT NULL, cor text NOT NULL, peso float NOT NULL, fornecedor text NOT NULL);
-create table logs(data timestamp,usuario text,descr text);
-create table pedidos(vlr float NOT NULL, datainicio date, idPedido serial primary key, manager text, idCli serial, constraint pedidos_fk_usuarios foreign key (manager) references usuarios(usuario), constraint pedidos_fk_cliente foreign key (idCli) references cliente(idCli));
-create table demanda(idPedido serial,idProd serial,idTecido serial,primary key (idPedido,idProd,idTecido),constraint demanda_fk_pedido foreign key (idPedido) references pedidos(idPedido), constraint demanda_fk_produto foreign key (idProd) references produto(idProd),constraint demanda_fk_tecido foreign key (idTecido) references tecido(id));
+create table tecido(id integer primary key, tipo text NOT NULL, cor text NOT NULL, peso numeric NOT NULL, fornecedor text NOT NULL);
+create table logs(data timestamp, usuario text, descr text);
+create table pedidos(vlr numeric NOT NULL, datainicio date, idPedido serial primary key, manager text, idCli int , constraint pedidos_fk_usuarios foreign key (manager) references usuarios(usuario), constraint pedidos_fk_cliente foreign key (idCli) references cliente(idCli));
+create table demanda(idPedido int ,idProd int,idTecido int , quantidade integer, primary key (idPedido,idProd,idTecido),constraint demanda_fk_pedido foreign key (idPedido) references pedidos(idPedido), constraint demanda_fk_produto foreign key (idProd) references produto(idProd),constraint demanda_fk_tecido foreign key (idTecido) references tecido(id));
 
 
 insert into produto(tipoprod,tamanho,metroPorPeca) values ('camisa','p',1), ('camisa','m',1.5), ('camisa','g',2), ('camisa','gg',2.5), ('camisa','pp',1), ('babylook','p',1), ('babylook','m',1.5),('babylook','pp',1),('babylook','g',1),('babylook','gg',1);
@@ -18,4 +18,4 @@ insert into cliente(nome,telefone) values ('cleber','111'),('marta','222'),('ber
 insert into cliente(nome,telefone,email,empresa) values ('maria','342','mariazinha@gmail.com','Bolos da Dona Maria'), ('Josias','423','josias221@gmail.com','Bar Da Esquina tm');
 insert into usuarios(cargo,nome,usuario,senha) values ('administrador','nestor','nestor','avz123fkow'),('funcionario','rudinei','rudi','nomedosfilhos');
 insert into pedidos(vlr,manager,idcli) values (300,'nestor',2),(525,'rudi',9);
-insert into demanda(idpedido,idprod,idtecido) values (1,3,2),(1,3,3),(1,3,1),(1,2,3),(2,3,2);
+insert into demanda(idpedido,idprod,idtecido,quantidade) values (1,3,2,10),(1,3,3,20),(1,3,1,5),(1,2,3,7),(2,3,2,40);

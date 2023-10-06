@@ -11,7 +11,7 @@ select * from demanda;
 
 -----------infos de um pedido--------------------------
 
-select tipoprod,tamanho,metroporpeca,cor
+select tipoprod,tamanho,metroporpeca,cor,quantidade
 from produto
 join demanda on demanda.idprod = produto.idprod
 join tecido on tecido.id = demanda.idtecido
@@ -19,7 +19,7 @@ where demanda.idpedido = 1;
 
 ---------infos de um pedido mais nome do cliente--------
 
-select tipoprod,tamanho,metroporpeca,cor,nome
+select tipoprod,tamanho,metroporpeca,cor,quantidade,nome
 from produto
 join demanda on demanda.idprod = produto.idprod
 join tecido on tecido.id = demanda.idtecido
