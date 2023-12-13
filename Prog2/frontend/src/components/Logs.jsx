@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Box, Stack, Button} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 import Texto from "./Texto";
 import Sidebar from "./Sidebar";
 
@@ -9,15 +10,17 @@ import Sidebar from "./Sidebar";
 const colunas = [
     { field: "data", headerName: "Data", width: 200 },
     { field: "usuario", headerName: "Usuario", width: 200 },
-    { field: "mudanca", headerName: "Log", width: 400 },
+    { field: "mudanca", headerName: "Mudanca", width: 600 },
 ]
 
-function LogsProg() {
+
+
+function Logs() {
 
     const [listaLogs, setListaLogs] = React.useState([]);
 
     React.useEffect(() => {
-        let res = axios.get("/Logs");
+        let res = axios.get("/logs");
         res.then((query) => {
             setListaLogs(query.data);
         });
@@ -28,29 +31,20 @@ function LogsProg() {
         <Box>
             <Sidebar />
             <Stack direction={"column"} alignItems={"center"}>
-                <Texto texto="Logs"/>
                 <Box
-                    height={"500px"}
-                    width={"820px"}
-                    bgcolor={'background.paper'}
+                    bgcolor={'cinza.light'}
                 >
+                    <Texto texto="Logs" />
                     <DataGrid
                         rows={listaLogs}
                         columns={colunas}
                         getRowId={(listaLogs) => listaLogs.idl}
                     />
                 </Box>
-                <Button
-                    variant="contained"
-                    // onClick={handleClick}
-                    type="submit"
-                    color="primary">
-                    Voltar
-                </Button>
             </Stack>
         </Box>
     );
 
 }
 
-export default LogsProg
+export default Logs;

@@ -1,12 +1,15 @@
 import React from "react";
 import axios from "axios";
-import { Box, Stack, Button, ThemeProvider, createTheme} from "@mui/material";
-import { DataGrid, GridCellParams } from "@mui/x-data-grid";
+import { Box, Stack, Typography} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 import Texto from "./Texto";
+import Sidebar from "./Sidebar";
 
 
 const colunas = [
-    { field: "nome", headerName: "Nome do Cliente", width: 200 },
+    { field: "idp", headerName: "ID do pedido", width: 100},
+    { field: "nome", headerName: "Nome do cliente", width: 200 },
     { field: "cpf", headerName: "CPF", width: 200 },
     { field: "datainicio", headerName: "Data de inicio", width: 200 },
     { field: "empresa", headerName: "Empresa", width: 200 },
@@ -17,9 +20,19 @@ const colunas = [
 
 function Pedidos(){
 
-    function handleClick(){
-        console.log("rodei");
+    const [idPedido,setIdPedido] = React.useState([2]);
+
+    const navigate = useNavigate();
+
+    function handleClick(id){
+        setIdPedido(id);
+        vaiProPedido(id);
     }
+
+    function vaiProPedido(id){
+        console.log(id);
+        navigate("/pedido", { state: { idpVindo : id} });
+    }   
 
     
     const [listaPedidos, setListaPedidos] = React.useState([]);
@@ -33,31 +46,21 @@ function Pedidos(){
 
 
     return (
-        <Box
-            sx={{ bgcolor: 'text.secondary' }}
-            height={'600px'}
-        >
+        <Box>
+            <Sidebar />
             <Stack direction={"column"} alignItems={"center"}>
-                <Texto texto="Pedidos"/>
                 <Box
-                    height={"500px"}
-                    width={"820px"}
-                    bgcolor={'background.paper'}
+                    bgcolor={'cinza.light'}
                 >
+                    <Texto texto="Pedidos"/>
                     <DataGrid
                         rows={listaPedidos}
                         columns={colunas}
                         getRowId={(listaPedidos) => listaPedidos.idp}
-                        // onCellClick={handleClick()} tentar usar isso depois
+                        onCellClick={(rows)=>{handleClick(rows.id)}}
                     />
+                    <Typography variant="h6">Selecione o pedido clicando no mesmo</Typography>
                 </Box>
-                <Button
-                    variant="contained"
-                    // onClick={handleClick}
-                    type="submit"
-                    color="primary">
-                    Voltar
-                </Button>
             </Stack>
         </Box>
     );

@@ -2,7 +2,9 @@ import React from "react";
 import axios from "axios";
 import { Box, Stack, Button} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom";
 import Texto from "./Texto";
+import Sidebar from "./Sidebar";
 
 
 const colunas = [
@@ -17,7 +19,13 @@ const colunas = [
 
 function Estoque() {
 
+    const navigate = useNavigate();
+
     const [listaTecidos, setListaTecidos] = React.useState([]);
+
+    function tecido(id){
+        navigate("/attTecido",  { state: { idtVindo : id} });
+    }
 
     React.useEffect(() => {
         let res = axios.get("/tecidos");
@@ -28,30 +36,20 @@ function Estoque() {
 
 
     return (
-        <Box
-            sx={{ bgcolor: 'text.secondary' }}
-            height={'600px'}
-        >
+        <Box>
+            <Sidebar />
             <Stack direction={"column"} alignItems={"center"}>
-                <Texto texto="Estoque" />
                 <Box
-                    height={"500px"}
-                    width={"820px"}
-                    bgcolor={'background.paper'}
+                    bgcolor={'cinza.light'}
                 >
+                    <Texto texto="Estoque" />
                     <DataGrid
                         rows={listaTecidos}
                         columns={colunas}
                         getRowId={(listaTecidos) => listaTecidos.idt}
+                        onCellClick={(rows) => {tecido(rows.id)}}
                     />
                 </Box>
-                <Button
-                    variant="contained"
-                    // onClick={handleClick}
-                    type="submit"
-                    color="primary">
-                    Voltar
-                </Button>
             </Stack>
         </Box>
     );

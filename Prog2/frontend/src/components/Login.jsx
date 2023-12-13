@@ -36,10 +36,7 @@ function Login() {
 
 
     return (
-        <Box
-            sx={{ bgcolor: 'text.secondary' }}
-            height={'600px'}
-        >
+        <Box>
             <Logo />
             <Texto texto="Bem Vindo!"/>
             <Stack
@@ -52,7 +49,8 @@ function Login() {
                 <ThemeProvider theme={theme}>
                     <Box
                         className="col-6"
-                        bgcolor={'background.paper'}
+                        bgcolor={"cinza.light"}
+                        margin={2}
                     >
                         <Stack direction={"column"} alignItems={"stretch"}>
                             <TextField
@@ -77,10 +75,10 @@ function Login() {
             </Stack>
             <Stack direction="column" alignItems={"center"} spacing={3}>
                 <Button
-                    variant="contained"
                     onClick={handleSubmit}
-                    type="submit"
-                    color="primary"
+                    color="cinza"
+                    size="small"
+                    variant="contained"
                 >
                     Login
                 </Button>

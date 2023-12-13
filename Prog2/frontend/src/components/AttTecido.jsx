@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import { Alert, Box, Button, Snackbar, Stack, TextField, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 
@@ -9,10 +10,12 @@ const colunasSelTec = [
     { field: "tipodetecidos", headerName: "Tecido do tipo:", width: 300 },
 ]
 
+function AttTecido() {
 
-function AddTecido() {
+    const { state } = useLocation();
+    const navigate = useNavigate();
 
-    const [idt, setIdt] = React.useState("");
+    const [idt, setIdt] = React.useState(state.idtVindo);
     const [tipo, setTipo] = React.useState("");
     const [cor, setCor] = React.useState("");
     const [peso, setPeso] = React.useState("");
@@ -25,48 +28,26 @@ function AddTecido() {
     const [listaTipoTecido, setListaTipoTecido] = React.useState([]);
 
 
-    function clearForm() {
-        setIdt();
-        setTipo();
-        setCor();
-        setFornecedor();
-        setPeso();
-    }
-
-    function handleCancelClick() {
-        if (idt !== "" || tipo !== "" || cor !== "" || fornecedor !== "" || peso !== "") {
-            setMessageText("Cadastro de curso cancelado!");
-            setMessageSeverity("warning");
-            setOpenMessage(true);
-        }
-        clearForm();
+    function handleVoltaClick() {
+        navigate("/estoque");
     }
 
     async function handleSubmit() {
         if (idt !== "" || tipo !== "" || cor !== "" || fornecedor !== "" || peso !== "") {
             try {
-                let res = await axios.post("/addTecido", {
+                axios.post("/attTecido", {
                     idt: idt,
                     tipo: tipo,
                     cor: cor,
                     fornecedor: fornecedor,
                     peso: peso,
                 });
-                if (res.status === 200){
-                    let mudanca = (`Entrada de ${peso}Kgs de tecido ${tipo}, cor ${cor}, fornecedor ${fornecedor}`);
-                    console.log(peso);
-                    axios.post("/novaLog",{
-                        mudanca: mudanca,
-                        usuario: (""),
-                    });
-                    console.log(`idt: ${idt} - tipo: ${tipo}`);
-                }
-                setMessageText("Tecido adicionado com sucesso!");
+                setMessageText("Tecido atualizado com sucesso!");
                 setMessageSeverity("success");
-                clearForm();
+                navigate("/estoque");
             } catch (error) {
                 console.log(error);
-                setMessageText("Falha ao adicionar o tecido!");
+                setMessageText("Falha ao atualizar o tecido!");
                 setMessageSeverity("error");
             } finally {
                 setOpenMessage(true);
@@ -86,9 +67,18 @@ function AddTecido() {
         setOpenMessage(false);
     }
 
-    async function getData(){
+    async function getData() {
         let res = await axios.get("/tipostecido");
         setListaTipoTecido(res.data);
+        res = await axios.get("/tecido", {
+            params: {
+                idt: idt,
+            }
+        });
+        setCor(res.data.cor);
+        setFornecedor(res.data.fornecedor);
+        setPeso(res.data.peso);
+        setTipo(res.data.tipo);
     }
 
     function handleClickTecido(id) {
@@ -106,7 +96,7 @@ function AddTecido() {
                 <Stack direction={"column"} spacing={2} alignItems={"center"}>
                     <Box bgcolor={"cinza.light"} padding={2}>
                         <Stack direction={"column"} alignItems={"center"}>
-                            <Typography variant="h3">Adicionar Tecido:</Typography>
+                            <Typography variant="h3">Atualizar Tecido:</Typography>
                         </Stack>
                         <Stack direction={"row"} alignItems={"stretch"} spacing={3}>
                             <Box width={'400px'}>
@@ -174,7 +164,7 @@ function AddTecido() {
                                             type="submit"
                                             color="cinza"
                                         >
-                                            Adicionar
+                                            Atualizar
                                         </Button>
                                         <Button
                                             variant="contained"
@@ -182,10 +172,10 @@ function AddTecido() {
                                                 maxWidth: "100px",
                                                 minWidth: "100px",
                                             }}
-                                            onClick={handleCancelClick}
+                                            onClick={handleVoltaClick}
                                             color="cinza"
                                         >
-                                            Cancelar
+                                            Voltar
                                         </Button>
                                     </Stack>
                                 </Stack>
@@ -211,4 +201,4 @@ function AddTecido() {
     )
 }
 
-export default AddTecido;
+export default AttTecido;
